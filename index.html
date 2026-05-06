@@ -1,18 +1,812 @@
+## 📄 Complete Code
+
+### index.html
+```html
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Recipe Book</title>
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Recipe Book | Delicious Recipes at Your Fingertips</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo i {
+            color: #667eea;
+            margin-right: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        /* Header Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        /* Search Bar */
+        .search-section {
+            max-width: 800px;
+            margin: 0 auto 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 1rem;
+            background: white;
+            border-radius: 50px;
+            padding: 0.5rem 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .search-box input {
+            flex: 1;
+            border: none;
+            padding: 1rem;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .search-box button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            padding: 0 2rem;
+            border-radius: 50px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .search-box button:hover {
+            transform: scale(1.05);
+        }
+
+        /* Category Filters */
+        .filters {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .filter-btn {
+            padding: 0.6rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            background: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Recipe Grid */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .recipe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .recipe-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .recipe-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .recipe-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .recipe-category {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .favorite-icon {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .favorite-icon i {
+            color: #ff4757;
+            font-size: 1.2rem;
+        }
+
+        .favorite-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .recipe-info {
+            padding: 1.5rem;
+        }
+
+        .recipe-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .recipe-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .recipe-meta i {
+            margin-right: 0.3rem;
+        }
+
+        .recipe-description {
+            color: #777;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Modal for Recipe Details */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            animation: slideUp 0.4s ease;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.3s ease;
+        }
+
+        .close-modal:hover {
+            color: #333;
+        }
+
+        .modal-recipe-image {
+            width: 100%;
+            height: 300px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal-meta {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #eee;
+        }
+
+        .ingredients-section, .instructions-section {
+            margin-bottom: 2rem;
+        }
+
+        .ingredients-section h3, .instructions-section h3 {
+            margin-bottom: 1rem;
+            color: #667eea;
+        }
+
+        .ingredients-list, .instructions-list {
+            list-style-position: inside;
+            line-height: 1.8;
+        }
+
+        .print-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            font-weight: 500;
+            margin-top: 1rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: #1a1a2e;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .recipe-grid {
+                grid-template-columns: 1fr;
+            }
+            .modal-content {
+                margin: 1rem;
+                padding: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-utensils"></i> Digital Recipe Book
+            </div>
+            <div class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#recipes">Recipes</a>
+                <a href="#" id="favoritesLink"><i class="far fa-heart"></i> Favorites</a>
+            </div>
+        </div>
+    </nav>
 
-<h1>🍽️ Recipe Book</h1>
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <h1><i class="fas fa-book-open"></i> Welcome to Digital Recipe Book</h1>
+        <p>Discover delicious recipes from around the world | Cook with confidence</p>
+    </section>
 
-<input type="text" id="search" placeholder="Search recipe...">
+    <!-- Search Section -->
+    <div class="search-section">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search recipes by name or ingredients...">
+            <button id="searchBtn"><i class="fas fa-search"></i> Search</button>
+        </div>
+    </div>
 
-<div id="recipes"></div>
+    <!-- Filters -->
+    <div class="filters">
+        <button class="filter-btn active" data-category="all">All Recipes</button>
+        <button class="filter-btn" data-category="indian">Indian</button>
+        <button class="filter-btn" data-category="italian">Italian</button>
+        <button class="filter-btn" data-category="dessert">Desserts</button>
+        <button class="filter-btn" data-category="healthy">Healthy</button>
+    </div>
 
-<script src="script.js"></script>
+    <!-- Recipe Grid -->
+    <div class="container">
+        <div class="recipe-grid" id="recipeGrid"></div>
+    </div>
 
+    <!-- Modal -->
+    <div id="recipeModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p><i class="fas fa-heart" style="color: #ff4757;"></i> Made with passion for cooking</p>
+        <p>Digital Recipe Book | Karunya Institute of Technology and Sciences</p>
+    </footer>
+
+    <script>
+        // Recipe Database
+        const recipes = [
+            {
+                id: 1,
+                name: "Chicken Biryani",
+                category: "indian",
+                cuisine: "Indian",
+                prepTime: "30 mins",
+                cookTime: "45 mins",
+                servings: 4,
+                image: "https://images.unsplash.com/photo-1563379091339-03b21dd4dfa4?w=500",
+                description: "Aromatic rice dish layered with spiced chicken and caramelized onions.",
+                ingredients: [
+                    "500g chicken, cut into pieces",
+                    "2 cups basmati rice",
+                    "4 onions, sliced",
+                    "2 tomatoes, chopped",
+                    "1 cup yogurt",
+                    "Ginger-garlic paste",
+                    "Biryani masala",
+                    "Saffron soaked in milk",
+                    "Fresh coriander and mint"
+                ],
+                instructions: [
+                    "Marinate chicken with yogurt and spices for 1 hour.",
+                    "Cook rice until 70% done, drain and set aside.",
+                    "Fry onions until golden brown.",
+                    "Cook marinated chicken until tender.",
+                    "Layer rice and chicken in a pot.",
+                    "Sprinkle saffron milk and fried onions.",
+                    "Cover and cook on low heat for 20 minutes (dum).",
+                    "Serve hot with raita."
+                ]
+            },
+            {
+                id: 2,
+                name: "Margherita Pizza",
+                category: "italian",
+                cuisine: "Italian",
+                prepTime: "20 mins",
+                cookTime: "15 mins",
+                servings: 2,
+                image: "https://images.unsplash.com/photo-1604382355076-af4b0eb60143?w=500",
+                description: "Classic Italian pizza with fresh tomatoes, mozzarella, and basil.",
+                ingredients: [
+                    "Pizza dough",
+                    "Fresh mozzarella cheese",
+                    "Tomato sauce",
+                    "Fresh basil leaves",
+                    "Olive oil",
+                    "Salt and pepper"
+                ],
+                instructions: [
+                    "Preheat oven to 250°C (480°F).",
+                    "Roll out pizza dough into a circle.",
+                    "Spread tomato sauce evenly.",
+                    "Top with sliced mozzarella.",
+                    "Bake for 10-12 minutes until crust is golden.",
+                    "Add fresh basil leaves.",
+                    "Drizzle with olive oil before serving."
+                ]
+            },
+            {
+                id: 3,
+                name: "Chocolate Lava Cake",
+                category: "dessert",
+                cuisine: "French",
+                prepTime: "15 mins",
+                cookTime: "12 mins",
+                servings: 4,
+                image: "https://images.unsplash.com/photo-1624353365286-1f8d62daad51?w=500",
+                description: "Decadent chocolate cake with a warm, gooey center.",
+                ingredients: [
+                    "100g dark chocolate",
+                    "100g butter",
+                    "2 eggs",
+                    "50g sugar",
+                    "30g flour",
+                    "Pinch of salt"
+                ],
+                instructions: [
+                    "Preheat oven to 200°C (400°F).",
+                    "Melt chocolate and butter together.",
+                    "Whisk eggs and sugar until fluffy.",
+                    "Fold in melted chocolate mixture.",
+                    "Add flour and mix gently.",
+                    "Pour into ramekins.",
+                    "Bake for 10-12 minutes.",
+                    "Serve immediately with ice cream."
+                ]
+            },
+            {
+                id: 4,
+                name: "Quinoa Salad",
+                category: "healthy",
+                cuisine: "International",
+                prepTime: "15 mins",
+                cookTime: "15 mins",
+                servings: 2,
+                image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500",
+                description: "Fresh and nutritious quinoa salad with vegetables.",
+                ingredients: [
+                    "1 cup quinoa",
+                    "Cucumber, diced",
+                    "Cherry tomatoes",
+                    "Bell peppers",
+                    "Feta cheese",
+                    "Lemon juice",
+                    "Olive oil",
+                    "Fresh parsley"
+                ],
+                instructions: [
+                    "Cook quinoa according to package instructions.",
+                    "Let quinoa cool completely.",
+                    "Chop all vegetables into small pieces.",
+                    "Mix quinoa with vegetables.",
+                    "Add crumbled feta cheese.",
+                    "Dress with lemon juice and olive oil.",
+                    "Garnish with fresh parsley."
+                ]
+            },
+            {
+                id: 5,
+                name: "Butter Chicken",
+                category: "indian",
+                cuisine: "Indian",
+                prepTime: "20 mins",
+                cookTime: "30 mins",
+                servings: 4,
+                image: "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=500",
+                description: "Creamy and flavorful North Indian curry.",
+                ingredients: [
+                    "500g chicken",
+                    "Butter",
+                    "Tomato puree",
+                    "Fresh cream",
+                    "Kasuri methi",
+                    "Garam masala",
+                    "Ginger-garlic paste",
+                    "Red chili powder"
+                ],
+                instructions: [
+                    "Marinate chicken with spices and yogurt.",
+                    "Grill or pan-fry chicken until charred.",
+                    "Prepare gravy with butter and tomato puree.",
+                    "Add cream and kasuri methi.",
+                    "Simmer gravy until thick.",
+                    "Add cooked chicken to gravy.",
+                    "Serve with naan or rice."
+                ]
+            },
+            {
+                id: 6,
+                name: "Pasta Alfredo",
+                category: "italian",
+                cuisine: "Italian",
+                prepTime: "10 mins",
+                cookTime: "15 mins",
+                servings: 3,
+                image: "https://images.unsplash.com/photo-1645112411341-6c3fd023714a?w=500",
+                description: "Creamy Parmesan pasta sauce with fettuccine.",
+                ingredients: [
+                    "200g fettuccine",
+                    "1 cup heavy cream",
+                    "1/2 cup parmesan cheese",
+                    "Butter",
+                    "Garlic",
+                    "Black pepper",
+                    "Parsley"
+                ],
+                instructions: [
+                    "Cook pasta in salted water until al dente.",
+                    "Melt butter in a pan.",
+                    "Add minced garlic and saute.",
+                    "Pour heavy cream and simmer.",
+                    "Add parmesan cheese and stir until melted.",
+                    "Toss pasta in sauce.",
+                    "Garnish with black pepper and parsley."
+                ]
+            }
+        ];
+
+        let currentRecipes = [...recipes];
+        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+
+        // Save favorites to localStorage
+        function saveFavorites() {
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+        }
+
+        // Toggle favorite
+        function toggleFavorite(recipeId) {
+            const index = favorites.indexOf(recipeId);
+            if (index === -1) {
+                favorites.push(recipeId);
+            } else {
+                favorites.splice(index, 1);
+            }
+            saveFavorites();
+            displayRecipes(currentRecipes);
+        }
+
+        // Display recipes
+        function displayRecipes(recipesToShow) {
+            const grid = document.getElementById('recipeGrid');
+            grid.innerHTML = '';
+
+            if (recipesToShow.length === 0) {
+                grid.innerHTML = '<p style="text-align:center; color:white; font-size:1.2rem;">No recipes found. Try another search!</p>';
+                return;
+            }
+
+            recipesToShow.forEach(recipe => {
+                const card = document.createElement('div');
+                card.className = 'recipe-card';
+                card.innerHTML = `
+                    <div class="recipe-image" style="background-image: url('${recipe.image}')">
+                        <span class="recipe-category">${recipe.cuisine}</span>
+                        <div class="favorite-icon" onclick="event.stopPropagation(); toggleFavorite(${recipe.id})">
+                            <i class="${favorites.includes(recipe.id) ? 'fas' : 'far'} fa-heart"></i>
+                        </div>
+                    </div>
+                    <div class="recipe-info">
+                        <h3 class="recipe-title">${recipe.name}</h3>
+                        <div class="recipe-meta">
+                            <span><i class="far fa-clock"></i> ${recipe.prepTime}</span>
+                            <span><i class="fas fa-fire"></i> ${recipe.cookTime}</span>
+                            <span><i class="fas fa-utensils"></i> Serves ${recipe.servings}</span>
+                        </div>
+                        <p class="recipe-description">${recipe.description}</p>
+                    </div>
+                `;
+                card.onclick = () => showRecipeDetails(recipe);
+                grid.appendChild(card);
+            });
+        }
+
+        // Show recipe details in modal
+        function showRecipeDetails(recipe) {
+            const modal = document.getElementById('recipeModal');
+            const modalContent = document.getElementById('modalContent');
+            
+            modalContent.innerHTML = `
+                <div class="modal-recipe-image" style="background-image: url('${recipe.image}')"></div>
+                <h2 class="modal-title">${recipe.name}</h2>
+                <div class="modal-meta">
+                    <span><i class="far fa-clock"></i> Prep: ${recipe.prepTime}</span>
+                    <span><i class="fas fa-fire"></i> Cook: ${recipe.cookTime}</span>
+                    <span><i class="fas fa-utensils"></i> Serves: ${recipe.servings}</span>
+                    <span><i class="fas fa-globe"></i> ${recipe.cuisine}</span>
+                </div>
+                <div class="ingredients-section">
+                    <h3><i class="fas fa-shopping-basket"></i> Ingredients</h3>
+                    <ul class="ingredients-list">
+                        ${recipe.ingredients.map(ing => `<li>${ing}</li>`).join('')}
+                    </ul>
+                </div>
+                <div class="instructions-section">
+                    <h3><i class="fas fa-list-ol"></i> Instructions</h3>
+                    <ol class="instructions-list">
+                        ${recipe.instructions.map(inst => `<li>${inst}</li>`).join('')}
+                    </ol>
+                </div>
+                <button class="print-btn" onclick="window.print()"><i class="fas fa-print"></i> Print Recipe</button>
+            `;
+            
+            modal.style.display = 'block';
+        }
+
+        // Filter recipes by category
+        function filterByCategory(category) {
+            if (category === 'all') {
+                currentRecipes = [...recipes];
+            } else {
+                currentRecipes = recipes.filter(recipe => recipe.category === category);
+            }
+            displayRecipes(currentRecipes);
+            
+            // Update active button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.category === category) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        // Search recipes
+        function searchRecipes() {
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            if (query === '') {
+                currentRecipes = [...recipes];
+            } else {
+                currentRecipes = recipes.filter(recipe => 
+                    recipe.name.toLowerCase().includes(query) ||
+                    recipe.ingredients.some(ing => ing.toLowerCase().includes(query)) ||
+                    recipe.cuisine.toLowerCase().includes(query)
+                );
+            }
+            displayRecipes(currentRecipes);
+            
+            // Reset active filter button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.category === 'all') {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        // Show favorites only
+        function showFavorites() {
+            currentRecipes = recipes.filter(recipe => favorites.includes(recipe.id));
+            displayRecipes(currentRecipes);
+        }
+
+        // Event Listeners
+        document.getElementById('searchBtn').addEventListener('click', searchRecipes);
+        document.getElementById('searchInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') searchRecipes();
+        });
+        
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => filterByCategory(btn.dataset.category));
+        });
+        
+        document.getElementById('favoritesLink').addEventListener('click', (e) => {
+            e.preventDefault();
+            showFavorites();
+        });
+        
+        // Modal close
+        document.querySelector('.close-modal').onclick = function() {
+            document.getElementById('recipeModal').style.display = 'none';
+        };
+        
+        window.onclick = function(event) {
+            const modal = document.getElementById('recipeModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        };
+        
+        // Initialize
+        displayRecipes(recipes);
+    </script>
 </body>
 </html>
