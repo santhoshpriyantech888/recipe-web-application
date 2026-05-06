@@ -33,4 +33,3 @@ The Digital Recipe Book is a front-end web application that provides a collectio
 - **FontAwesome** - Icons
 - **Google Fonts** - Typography
 
-## 📁 File Structure
